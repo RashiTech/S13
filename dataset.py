@@ -103,8 +103,31 @@ class YOLODataset(Dataset):
         return img4, labels4 
 
     def __getitem__(self, index):
+        
+        k =  np.random.rand(1)
+        if k >= 0.75:
 
-        image, bboxes = self.load_mosaic(index)
+            image, (h0, w0), (h, w) = load_image(self, index)
+
+            # Letterbox
+            shape = self.batch_shapes[self.batch[index]] if self.rect else self.img_size  # final letterboxed shape
+            image, ratio, pad = letterbox(image, shape, auto=False, scaleup=self.augment)
+            shapes = (h0, w0), ((h / h0, w / w0), pad)  # for COCO mAP rescaling
+
+            # Load labels
+            bboxes = []
+            x = self.bboxes[index]
+            if x is not None and x.size > 0:
+                # Normalized xywh to pixel xyxy format
+                bboxes = x.copy()
+                bboxes[:, 1] = ratio[0] * w * (x[:, 1] - x[:, 3] / 2) + pad[0]  # pad width
+                bboxes[:, 2] = ratio[1] * h * (x[:, 2] - x[:, 4] / 2) + pad[1]  # pad height
+                bboxes[:, 3] = ratio[0] * w * (x[:, 1] + x[:, 3] / 2) + pad[0]
+                bboxes[:, 4] = ratio[1] * h * (x[:, 2] + x[:, 4] / 2) + pad[1]
+
+
+        else:
+            image, bboxes = self.load_mosaic(index)
 
         if self.transform:
             augmentations = self.transform(image=image, bboxes=bboxes)
@@ -143,6 +166,21 @@ class YOLODataset(Dataset):
 
         return image, tuple(targets)
 
+def load_image(self, index):
+    # loads 1 image from dataset, returns img, original hw, resized hw
+    img = self.imgs[index]
+    if img is None:  # not cached
+        img_path = self.img_files[index]
+        img = cv2.imread(img_path)  # BGR
+        assert img is not None, 'Image Not Found ' + img_path
+        h0, w0 = img.shape[:2]  # orig hw
+        r = self.img_size / max(h0, w0)  # resize image to img_size
+        if r < 1 or (self.augment and r != 1):  # always resize down, only resize up if training with augmentation
+            interp = cv2.INTER_AREA if r < 1 and not self.augment else cv2.INTER_LINEAR
+            img = cv2.resize(img, (int(w0 * r), int(h0 * r)), interpolation=interp)
+        return img, (h0, w0), img.shape[:2]  # img, hw_original, hw_resized
+    else:
+        return self.imgs[index], self.img_hw0[index], self.img_hw[index]  # img, hw_original, hw_resized
 
 def test():
     anchors = config.ANCHORS
