@@ -104,30 +104,30 @@ class YOLODataset(Dataset):
 
     def __getitem__(self, index):
         
-        k =  np.random.rand(1)
-        if k >= 0.75:
+        # k =  np.random.rand(1)
+        # if k >= 0.75:
 
-            image, (h0, w0), (h, w) = load_image(self, index)
+        #     image, (h0, w0), (h, w) = load_image(self, index)
 
-            # Letterbox
-            shape = self.batch_shapes[self.batch[index]] if self.rect else self.img_size  # final letterboxed shape
-            image, ratio, pad = letterbox(image, shape, auto=False, scaleup=self.augment)
-            shapes = (h0, w0), ((h / h0, w / w0), pad)  # for COCO mAP rescaling
+        #     # Letterbox
+        #     shape = self.batch_shapes[self.batch[index]] if self.rect else self.img_size  # final letterboxed shape
+        #     image, ratio, pad = letterbox(image, shape, auto=False, scaleup=self.augment)
+        #     shapes = (h0, w0), ((h / h0, w / w0), pad)  # for COCO mAP rescaling
 
-            # Load labels
-            bboxes = []
-            x = self.bboxes[index]
-            if x is not None and x.size > 0:
-                # Normalized xywh to pixel xyxy format
-                bboxes = x.copy()
-                bboxes[:, 1] = ratio[0] * w * (x[:, 1] - x[:, 3] / 2) + pad[0]  # pad width
-                bboxes[:, 2] = ratio[1] * h * (x[:, 2] - x[:, 4] / 2) + pad[1]  # pad height
-                bboxes[:, 3] = ratio[0] * w * (x[:, 1] + x[:, 3] / 2) + pad[0]
-                bboxes[:, 4] = ratio[1] * h * (x[:, 2] + x[:, 4] / 2) + pad[1]
+        #     # Load labels
+        #     bboxes = []
+        #     x = self.bboxes[index]
+        #     if x is not None and x.size > 0:
+        #         # Normalized xywh to pixel xyxy format
+        #         bboxes = x.copy()
+        #         bboxes[:, 1] = ratio[0] * w * (x[:, 1] - x[:, 3] / 2) + pad[0]  # pad width
+        #         bboxes[:, 2] = ratio[1] * h * (x[:, 2] - x[:, 4] / 2) + pad[1]  # pad height
+        #         bboxes[:, 3] = ratio[0] * w * (x[:, 1] + x[:, 3] / 2) + pad[0]
+        #         bboxes[:, 4] = ratio[1] * h * (x[:, 2] + x[:, 4] / 2) + pad[1]
 
 
-        else:
-            image, bboxes = self.load_mosaic(index)
+        # else:
+        image, bboxes = self.load_mosaic(index)
 
         if self.transform:
             augmentations = self.transform(image=image, bboxes=bboxes)
