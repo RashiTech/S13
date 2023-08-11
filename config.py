@@ -34,7 +34,7 @@ ANCHORS = [
 
 SCALED_ANCHORS = (
     torch.tensor(ANCHORS) * torch.tensor(S).unsqueeze(1).unsqueeze(1).repeat(1, 3, 2)
-)
+).to(device="cuda")
 means = [0.485, 0.456, 0.406]
 
 scale = 1.1
