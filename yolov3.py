@@ -78,8 +78,7 @@ class YOLOV3_PL(LightningModule):
             transform=config.train_transforms,
             img_dir=config.IMG_DIR,
             label_dir=config.LABEL_DIR,
-            anchors=config.ANCHORS,
-            mosaic=0.75
+            anchors=config.ANCHORS
         )
 
         train_loader = YOLODataset(
@@ -98,8 +97,7 @@ class YOLOV3_PL(LightningModule):
             transform=config.test_transforms,
             img_dir=config.IMG_DIR,
             label_dir=config.LABEL_DIR,
-            anchors=config.ANCHORS,
-            mosaic=0
+            anchors=config.ANCHORS
         )
 
         train_eval_loader = DataLoader(
