@@ -47,7 +47,7 @@ class YOLOV3_PL(LightningModule):
         anchors=config.ANCHORS
         )
 
-        self.valid_dataloader = DataLoader(
+        return DataLoader(
         dataset=self.valid_data,
         batch_size=self.batch_size,
         num_workers=config.NUM_WORKERS,
@@ -55,10 +55,8 @@ class YOLOV3_PL(LightningModule):
         shuffle=False
         )
 
-        return valid_dataloader
-
     def test_dataloader(self):
-        return self.valid_dataloader()
+        return self.val_dataloader()
         
     def forward(self, x):
         return self.model(x)
