@@ -48,8 +48,34 @@ class YOLODataset(Dataset):
 
     def __len__(self):
         return len(self.annotations)
+
+    def load_image(self, index):
+        
+        label_path = os.path.join(self.label_dir, self.annotations.iloc[index, 1])
+        
+        # Load data from the file
+        data = np.loadtxt(fname=label_path,delimiter=" ", ndmin=2)
+        
+        # Shift the values in each row by 4 positions to the right
+        shifted_data = np.roll(data, 4, axis=1)
+        
+        # Convert the shifted data to a Python list
+        bboxes = shifted_data.tolist()
+            
+        img_path = os.path.join(self.img_dir, self.annotations.iloc[index, 0])
+        
+        image = np.array(Image.open(img_path).convert("RGB"))
+
+        return image, bboxes
     
-    def load_mosaic(self, index):
+    def load_mosaic(self, index, p=0.75):
+        ''' loading mosaic augmentation for only 75% times '''
+        
+        k = np.random.rand(1)
+        if k > p:
+
+             return self.load_image(index)
+
         # YOLOv5 4-mosaic loader. Loads 1 image + 3 random images into a 4-image mosaic
         labels4 = []
         s = self.image_size
