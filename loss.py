@@ -83,5 +83,5 @@ class YoloLoss(LightningModule):
     def forward(self, predictions, target, scaled_anchors):
         tot_loss = 0
         for i in range(len(target)):
-            combined_loss += self.yolo_basic(predictions[i], target[i], scaled_anchors[i])
+            tot_loss += self.yolo_basic(predictions[i], target[i], scaled_anchors[i])
         return tot_loss
