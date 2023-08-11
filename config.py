@@ -32,6 +32,9 @@ ANCHORS = [
     [(0.02, 0.03), (0.04, 0.07), (0.08, 0.06)],
 ]  # Note these have been rescaled to be between [0, 1]
 
+SCALED_ANCHORS = (
+    torch.tensor(ANCHORS) * torch.tensor(S).unsqueeze(1).unsqueeze(1).repeat(1, 3, 2)
+)
 means = [0.485, 0.456, 0.406]
 
 scale = 1.1
