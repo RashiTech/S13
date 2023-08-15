@@ -91,9 +91,9 @@ class YOLOV3_PL(LightningModule):
             steps_per_epoch=len(self.train_dataloader()),
             epochs=self.num_epochs,
             pct_start=0.2,
-            div_factor=100,
+            div_factor=10,
             three_phase=False,
-            final_div_factor=100,
+            final_div_factor=10,
             anneal_strategy='linear'
         )
         return {
