@@ -1,4 +1,4 @@
-# S13- Training the State of the Art YoloV3 model from scratch
+# S13- Training the State of the Art YoloV3 model from scratch on CUDA device-'NVIDIA A100-SXM4-40GB'
 
 ## Hugging face app link
 
@@ -40,6 +40,4 @@ One Cycle Policy implemented with max LR 1e-3
 
 ![image](https://github.com/RashiTech/S13/assets/90626052/b0d66820-8af2-4c02-bb07-4cb16975a94c)
 
-![Uploading image.png…]()
-
-
+![image](https://github.com/RashiTech/S13/assets/90626052/e090e8d8-342f-4dfc-8ab8-5ad56e99e97a)
