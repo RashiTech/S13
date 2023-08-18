@@ -1,6 +1,6 @@
 # S13- Training the State of the Art YoloV3 model from scratch on CUDA device-'NVIDIA A100-SXM4-40GB'
 
-## Hugging face app link
+## Hugging Face app link
 
 https://huggingface.co/spaces/RashiAgarwal/YOLO_v3_PyTorchLightning
 
